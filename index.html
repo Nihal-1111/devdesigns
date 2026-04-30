@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dev Designs — Enter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- TRANSITION OVERLAY -->
+<div id="trans"><div class="trans-half"></div><div class="trans-half"></div></div>
+
+<!-- ════════════ ENTRANCE ════════════ -->
+<div id="entrance">
+  <div class="door door-l"></div>
+  <div class="door door-r"></div>
+  <div class="enter-ui">
+    <div class="enter-emblem"><i class="fas fa-compass-drafting"></i></div>
+    <div class="enter-brand">Dev <em>Designs</em></div>
+    <div class="enter-tagline">Engineering Services · Bhopal</div>
+    <div class="enter-divider"></div>
+    <button class="enter-btn" id="enterBtn">
+      <span>Enter</span>
+      <i class="fas fa-arrow-right"></i>
+    </button>
+    <div class="enter-scan">
+      <div class="scan-dot"></div>
+      <span>Construction & Design Studio</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ SITE ════════════ -->
+<div id="site">
+
+  <!-- Header -->
+  <div id="header">
+<div class="h-logo">
+  <img src="images/DDES Digital LOG.png" alt="Dev Designs Logo">
+</div>    <div class="h-center">
+      <span class="h-section-name" id="hSecName">Home</span>
+      <span class="h-sep">—</span>
+      <span id="hSecSub">Bhopal, MP</span>
+    </div>
+    <div class="h-right">
+      <div class="h-counter" id="hCounter">01 / 06</div>
+      <div class="h-progress"><div class="h-progress-fill" id="hProg" style="width:16.6%"></div></div>
+    </div>
+  </div>
+
+  <!-- Dot Nav -->
+  <div id="dotnav">
+    <div class="dot active" data-index="0" data-label="Home"></div>
+    <div class="dot" data-index="1" data-label="About"></div>
+    <div class="dot" data-index="2" data-label="Services"></div>
+    <div class="dot" data-index="3" data-label="Projects"></div>
+    <div class="dot" data-index="4" data-label="Process"></div>
+    <div class="dot" data-index="5" data-label="Contact"></div>
+  </div>
+
+  <!-- Sections -->
+  <div id="sections">
+
+    <!-- S0: HOME -->
+    <section class="sec active" id="s0">
+      <div class="sec-wrap">
+        <div class="home-bg"></div>
+        <div class="home-grid-lines"></div>
+        <div class="ri d0 home-kicker"><i class="fas fa-map-marker-alt"></i> Bhopal's Premier Construction componey</div>
+        <h1 class="ri d1 home-h1">Building Your Vision,<br><em>Designing</em> Your Future.</h1>
+        <p class="ri d2 home-sub">Complete construction, design, renovation, and property solutions crafted for Bhopal and beyond.</p>
+        <div class="ri d3 home-actions">
+          <a href="#" class="btn-g btn-solid" onclick="goTo(5);return false;"><i class="fas fa-comments"></i> Free Consultation</a>
+          <a href="#" class="btn-g btn-outline" onclick="goTo(2);return false;"><i class="fas fa-layer-group"></i> Our Services</a>
+        </div>
+        <div class="ri d4 home-stats">
+          <div class="hstat">
+            <div class="hstat-num">20<sup>+</sup></div>
+            <div class="hstat-lbl">Projects Done</div>
+          </div>
+          <div class="hstat">
+            <div class="hstat-num">2<sup>+</sup></div>
+            <div class="hstat-lbl">Years Active</div>
+          </div>
+          <div class="hstat">
+            <div class="hstat-num">15<sup>+</sup></div>
+            <div class="hstat-lbl">Happy Clients</div>
+          </div>
+          <div class="hstat">
+            <div class="hstat-num">99.99<sup>%</sup></div>
+            <div class="hstat-lbl">Satisfaction</div>
+          </div>
+        </div>
+        <div class="home-scroll-hint ri d5">
+          <span>Scroll to explore</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- S1: ABOUT -->
+    <section class="sec" id="s1">
+      <div class="sec-wrap">
+        <div class="about-grid">
+          <div>
+            <div class="ri d0 sec-label">Who We Are</div>
+            <h2 class="ri d1 sec-title">Crafting spaces with <em>passion</em> &amp; precision.</h2>
+            <p class="ri d2 about-text" style="color:var(--muted-hi);line-height:1.9;font-weight:300;font-size:.95rem;margin-top:20px;">Dev Designs and Engineering Services is a trusted name in Bhopal's construction and design landscape. We merge engineering expertise with creative vision to deliver exceptional results — on time, every time.</p>
+            <div class="about-features">
+              <div class="ri d3 af-item"><div class="af-icon"><i class="fas fa-hard-hat"></i></div><div class="af-text">Full-cycle construction & project delivery</div></div>
+              <div class="ri d4 af-item"><div class="af-icon"><i class="fas fa-paintbrush"></i></div><div class="af-text">Bespoke interiors, murals & wall finishes</div></div>
+              <div class="ri d5 af-item"><div class="af-icon"><i class="fas fa-building"></i></div><div class="af-text">Real estate guidance & property consultation</div></div>
+              <div class="ri d6 af-item"><div class="af-icon"><i class="fas fa-shield-alt"></i></div><div class="af-text">Licensed, insured & quality-certified</div></div>
+            </div>
+          </div>
+          <div class="ri d2 about-visual">
+            <div class="av-ring avr1"></div>
+            <div class="av-ring avr2"></div>
+            <div class="av-ring avr3"></div>
+            <div class="av-center"><i class="fas fa-compass-drafting"></i></div>
+            <div class="av-pills">
+              <div class="av-pill avp1"><i class="fas fa-star"></i>4.9 Rating</div>
+              <div class="av-pill avp2"><i class="fas fa-clock"></i>Since 2014</div>
+              <div class="av-pill avp3"><i class="fas fa-map-marker-alt"></i>Bhopal, MP</div>
+              <div class="av-pill avp4"><i class="fas fa-check-circle"></i>200+ Done</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- S2: SERVICES -->
+    <section class="sec" id="s2">
+      
+      <div class="sec-wrap">
+  <div class="ri d0 sec-label">What We Do</div>
+  <h2 class="ri d1 sec-title">Our core <em>services.</em></h2>
+
+  <div class="services-grid">
+<!-- 1 -->
+<div class="ri d2 svc-card">
+  <div class="svc-num">01</div>
+  <div class="svc-icon-wrap"><i class="fas fa-hard-hat"></i></div>
+  <div class="svc-title">Construction & Maintenance</div>
+  <div class="svc-desc">Full-cycle residential and commercial builds with rigorous quality at every stage.</div>
+  <a href="services.html" class="svc-more">
+    Explore <i class="fas fa-arrow-right"></i>
+  </a>
+</div>
+
+<!-- 2 -->
+<div class="ri d3 svc-card">
+  <div class="svc-num">02</div>
+  <div class="svc-icon-wrap"><i class="fas fa-paintbrush"></i></div>
+  <div class="svc-title">Wall Art & Painting</div>
+  <div class="svc-desc">Bespoke murals, textures and finishes transforming walls into experiences.</div>
+  <a href="services.html" class="svc-more">
+    Explore <i class="fas fa-arrow-right"></i>
+  </a>
+</div>
+
+<!-- 3 -->
+<div class="ri d4 svc-card">
+  <div class="svc-num">03</div>
+  <div class="svc-icon-wrap"><i class="fas fa-chart-gantt"></i></div>
+  <div class="svc-title">Project Management</div>
+  <div class="svc-desc">Streamlined coordination of timelines, contractors and budgets end-to-end.</div>
+  <a href="services.html" class="svc-more">
+    Explore <i class="fas fa-arrow-right"></i>
+  </a>
+</div>
+
+<!-- 4 -->
+<div class="ri d5 svc-card">
+  <div class="svc-num">04</div>
+  <div class="svc-icon-wrap"><i class="fas fa-building"></i></div>
+  <div class="svc-title">Property Consultation</div>
+  <div class="svc-desc">Expert real estate guidance on valuation, investment and land-use in Bhopal.</div>
+  <a href="services.html" class="svc-more">
+    Explore <i class="fas fa-arrow-right"></i>
+  </a>
+</div>
+
+<!-- 5 -->
+<div class="ri d6 svc-card">
+  <div class="svc-num">05</div>
+  <div class="svc-icon-wrap"><i class="fas fa-ruler-combined"></i></div>
+  <div class="svc-title">Interior Design</div>
+  <div class="svc-desc">Thoughtful spaces designed around your lifestyle — aesthetic meets utility.</div>
+  <a href="services.html" class="svc-more">
+    Explore <i class="fas fa-arrow-right"></i>
+  </a>
+</div>
+
+<!-- 6 -->
+<div class="ri d7 svc-card">
+  <div class="svc-num">06</div>
+  <div class="svc-icon-wrap"><i class="fas fa-wrench"></i></div>
+  <div class="svc-title">Renovation & Repair</div>
+  <div class="svc-desc">Breathing new life into existing structures with precision and modern finishes.</div>
+  <a href="services.html" class="svc-more">
+    Explore <i class="fas fa-arrow-right"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+    </section>
+
+
+<!-- S3: PROJECTS -->
+
+<section class="sec" id="s3">
+  <div class="sec-wrap-projects">
+<div class="ri d0 sec-label">Portfolio</div>
+<h2 class="ri d1 sec-title">Selected <em>projects.</em></h2>
+
+<div class="projects-grid">
+
+  <!-- 1 -->
+  <a href="BLOG.html" class="ri d2 proj">
+    <div class="proj-bg">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="">
+      <div class="proj-hatch"></div>
+    </div>
+    <div class="proj-overlay">
+      <div class="proj-cat">Residential</div>
+      <div class="proj-name">Modern Villa, Arera Colony</div>
+      <div class="proj-tag">Construction · Interior</div>
+    </div>
+  </a>
+
+  <!-- 2 -->
+  <a href="BLOG.html" class="ri d3 proj">
+    <div class="proj-bg">
+      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c" alt="">
+      <div class="proj-hatch"></div>
+    </div>
+    <div class="proj-overlay">
+      <div class="proj-cat">Commercial</div>
+      <div class="proj-name">Office Fit-Out, MP Nagar</div>
+      <div class="proj-tag">Renovation · Management</div>
+    </div>
+  </a>
+
+  <!-- 3 -->
+  <a href="BLOG.html" class="ri d4 proj">
+    <div class="proj-bg">
+      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee" alt="">
+      <div class="proj-hatch"></div>
+    </div>
+    <div class="proj-overlay">
+      <div class="proj-cat">Artistic</div>
+      <div class="proj-name">Heritage Mural, Old Bhopal</div>
+      <div class="proj-tag">Wall Art · Painting</div>
+    </div>
+  </a>
+
+  <!-- 4 -->
+  <a href="BLOG.html" class="ri d5 proj">
+    <div class="proj-bg">
+      <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c" alt="">
+      <div class="proj-hatch"></div>
+    </div>
+    <div class="proj-overlay">
+      <div class="proj-cat">Residential</div>
+      <div class="proj-name">Duplex Home, Kolar Road</div>
+      <div class="proj-tag">Construction · Maintenance</div>
+    </div>
+  </a>
+
+  <!-- 5 -->
+  <a href="BLOG.html" class="ri d6 proj">
+    <div class="proj-bg">
+      <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8" alt="">
+      <div class="proj-hatch"></div>
+    </div>
+    <div class="proj-overlay">
+      <div class="proj-cat">Commercial</div>
+      <div class="proj-name">Retail Space, DB City Area</div>
+      <div class="proj-tag">Interior Design · Reno.</div>
+    </div>
+  </a>
+
+  <!-- 6 -->
+  <a href="BLOG.html" class="ri d7 proj">
+    <div class="proj-bg">
+      <img src="https://images.unsplash.com/photo-1460317442991-0ec209397118" alt="">
+      <div class="proj-hatch"></div>
+    </div>
+    <div class="proj-overlay">
+      <div class="proj-cat">Society</div>
+      <div class="proj-name">Complex, Hoshangabad Rd</div>
+      <div class="proj-tag">Construction · Consult.</div>
+    </div>
+  </a>
+
+</div>
+
+  </div>
+</section>
+
+
+    <!-- S4: PROCESS -->
+    <section class="sec" id="s4">
+      <div class="sec-wrap" style="text-align:left;">
+        <div class="ri d0 sec-label">How We Work</div>
+        <h2 class="ri d1 sec-title">Our <em>process</em><br>from idea to handover.</h2>
+        <div class="process-steps">
+          <div class="ri d2 pstep">
+            <div class="pstep-num">I</div>
+            <div class="pstep-title">Consultation</div>
+            <div class="pstep-desc">We understand your vision, goals, and constraints through a free discovery session — no obligations.</div>
+          </div>
+          <div class="ri d3 pstep">
+            <div class="pstep-num">II</div>
+            <div class="pstep-title">Planning</div>
+            <div class="pstep-desc">Detailed blueprints, material selection, and a clear timeline tailored to your needs and budget.</div>
+          </div>
+          <div class="ri d4 pstep">
+            <div class="pstep-num">III</div>
+            <div class="pstep-title">Execution</div>
+            <div class="pstep-desc">Skilled teams bring the plan to life with precision, safety, and regular client progress updates.</div>
+          </div>
+          <div class="ri d5 pstep">
+            <div class="pstep-num">IV</div>
+            <div class="pstep-title">Handover</div>
+            <div class="pstep-desc">Final walk-through, quality sign-off, and dedicated post-completion support for complete peace of mind.</div>
+          </div>
+        </div>
+        <div class="ri d6 process-cta">
+          <p>Ready to start your journey with us?</p>
+          <a href="#" class="btn-g btn-solid" onclick="goTo(5);return false;"><i class="fas fa-arrow-right"></i> Let's Talk</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- S5: CONTACT -->
+   <section class="sec" id="s5">
+  <div class="sec-wrap">
+    <div class="contact-grid">
+
+      <!-- LEFT INFO SAME -->
+      <div>
+        <div class="ri d0 sec-label">Get In Touch</div>
+        <h2 class="ri d1 contact-info-title">Let's build something <em>great</em> together.</h2>
+        <p class="ri d2 contact-info-sub">Have a project in mind or just a question? We respond within 24 hours.</p>
+
+        <div class="ri d3 cdetail"><div class="cd-ico"><i class="fas fa-phone"></i></div><div><div class="cd-lbl">Phone</div><div class="cd-val">+91 96694 48284</div></div></div>
+        <div class="ri d4 cdetail"><div class="cd-ico"><i class="fas fa-envelope"></i></div><div><div class="cd-lbl">Email</div><div class="cd-val">devdesigns68@gmail.com</div></div></div>
+      </div>
+
+      <!-- 🔥 FORM START -->
+      <form id="contact-form" class="ri d2 contact-form-wrap">
+
+        <div class="fg-row">
+          <div class="fg">
+            <label>Name</label>
+            <input type="text" name="user_name" required>
+          </div>
+
+          <div class="fg">
+            <label>Phone</label>
+            <input type="tel" name="user_phone" required>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label>Email</label>
+          <input type="email" name="user_email" required>
+        </div>
+
+        <div class="fg">
+          <label>Service</label>
+          <select name="service" required>
+            <option disabled selected value="">Select a service…</option>
+            <option>Construction & Maintenance</option>
+            <option>Wall Art & Painting</option>
+            <option>Project Management</option>
+            <option>Property Consultation</option>
+            <option>Interior Design</option>
+            <option>Renovation & Repair</option>
+          </select>
+        </div>
+
+        <div class="fg">
+          <label>Message</label>
+          <textarea name="message" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-send">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+
+      </form>
+      <!-- 🔥 FORM END -->
+
+    </div>
+  </div>
+</section>
+  </div><!-- /sections -->
+
+  <!-- Whatsapp -->
+  <a href="https://wa.me/919669448284" class="wa"><i class="fab fa-whatsapp"></i></a>
+
+</div><!-- /site -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+<script src="script.js">   
+</script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+(function(){
+  emailjs.init("sr53oY_LRzZ4J1Eay");
+})();
+
+document.getElementById("contact-form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  emailjs.sendForm("service_car9adv", "template_drk35rm", this)
+    .then(function(){
+      alert("Message Sent ✅");
+    }, function(error){
+      alert("Error ❌");
+      console.log(error);
+    });
+});
+</script>
+</body>
+</html>

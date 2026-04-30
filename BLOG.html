@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Blog — Dev Designs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ═══════════════════════════════════════════
+   LIGHT THEME — Warm Ivory × Gold × Navy
+═══════════════════════════════════════════ */
+:root{
+  --bg:          #f7f3ec;
+  --surface:     #ede8df;
+  --glass:       rgba(255,255,255,0.65);
+  --border:      rgba(30,25,20,.10);
+  --border-hi:   rgba(160,120,50,.38);
+  --accent:      #b8922a;
+  --accent-2:    #d4a83c;
+  --accent-dim:  rgba(184,146,42,.08);
+  --accent-hi:   rgba(184,146,42,.20);
+  --white:       #1a1612;       /* near-black body text      */
+  --muted:       #9a948a;
+  --muted-hi:    #5c5650;
+  --ease:        cubic-bezier(.76,0,.24,1);
+  --ease-out:    cubic-bezier(.22,1,.36,1);
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --fd:          'Cormorant Garamond',serif;
+  --fb:          'Outfit',sans-serif;
+  --sh-sm:       0 2px 10px rgba(30,25,20,.07);
+  --sh-md:       0 8px 28px rgba(30,25,20,.10);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--white);
+  font-family:var(--fb);font-weight:300;
+  overflow-x:hidden;cursor:none;
+}
+/* paper grain */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9997;
+  opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+a{text-decoration:none;color:inherit}
+button{cursor:none;font-family:var(--fb)}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{background:rgba(184,146,42,.2);border-radius:2px}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s var(--ease-spring),height .25s var(--ease-spring),background .3s}
+#cur-r{position:fixed;width:34px;height:34px;border:1px solid rgba(184,146,42,.42);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .4s var(--ease-out),height .4s var(--ease-out)}
+body:has(a:hover) #cur,
+body:has(button:hover) #cur{width:13px;height:13px;background:var(--muted-hi)}
+body:has(a:hover) #cur-r,
+body:has(button:hover) #cur-r{width:52px;height:52px;border-color:var(--border-hi)}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3rem;
+  background:rgba(247,243,236,.90);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  box-shadow:var(--sh-sm);
+}
+.nav-logo{display:flex;align-items:center;gap:.75rem}
+.nav-logo img{height:32px;width:auto;object-fit:contain}
+.nav-logo-text{font-family:var(--fd);font-size:1.3rem;font-weight:300;letter-spacing:.12em;color:var(--white)}
+.nav-logo-text em{font-style:italic;color:var(--accent)}
+.nav-center{
+  font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--muted-hi);
+  /* hidden on mobile via media query */
+}
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted-hi);transition:color .3s}
+.nav-links a:hover,.nav-links a.active{color:var(--accent)}
+.nav-back{
+  display:flex;align-items:center;gap:.5rem;
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted-hi);border:1px solid var(--border);padding:.45rem 1rem;
+  transition:all .3s;background:var(--glass);
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-back:hover,.nav-back:active{border-color:var(--border-hi);color:var(--accent)}
+
+/* ── HERO ── */
+.hero{
+  position:relative;padding:9rem 6rem 5rem;
+  overflow:hidden;border-bottom:1px solid var(--border);
+  background:var(--bg);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 55% at 60% 40%,rgba(184,146,42,.06) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(184,146,42,.055) 80px),
+    repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(184,146,42,.055) 80px);
+}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:end}
+
+.hero-left .eyebrow{
+  font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--accent);display:flex;align-items:center;gap:.8rem;margin-bottom:1.4rem;
+}
+.hero-left .eyebrow::before{content:'';display:inline-block;width:2rem;height:1px;background:var(--accent);opacity:.6}
+.hero-left h1{font-family:var(--fd);font-size:clamp(2.8rem,6vw,6.5rem);font-weight:300;line-height:.92;letter-spacing:-.03em;color:var(--white)}
+.hero-left h1 em{font-style:italic;color:var(--accent)}
+
+.hero-right{padding-bottom:.5rem}
+.hero-right p{
+  font-size:.88rem;color:var(--muted-hi);line-height:1.85;
+  border-left:2px solid var(--border-hi);padding-left:1.2rem;margin-bottom:2rem;
+}
+.hero-meta{display:flex;align-items:center;gap:2rem}
+.hero-meta-item{text-align:center}
+.hero-meta-num{font-family:var(--fd);font-size:2.2rem;font-weight:300;color:var(--white)}
+.hero-meta-num sup{font-size:.9rem;color:var(--accent)}
+.hero-meta-lbl{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.hero-meta-sep{width:1px;height:40px;background:var(--border)}
+
+/* ── TOPICS BANNER ── */
+.topic-banner{
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:0 6rem;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  background:var(--surface);
+}
+.topic-card{
+  padding:2rem;border-right:1px solid var(--border);
+  cursor:pointer;transition:background .4s;
+  position:relative;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+.topic-card:last-child{border-right:none}
+.topic-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--accent);transform:scaleY(0);transform-origin:top;
+  transition:transform .4s var(--ease);
+}
+.topic-card:hover,.topic-card:active{background:rgba(255,255,255,.55)}
+.topic-card:hover::before{transform:scaleY(1)}
+.topic-icon{font-size:1.3rem;color:var(--accent);margin-bottom:.8rem}
+.topic-name{font-size:.82rem;font-weight:500;color:var(--white);margin-bottom:.3rem}
+.topic-count{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+
+/* ── FILTER BAR ── */
+.filter-bar{
+  position:sticky;top:64px;z-index:400;
+  background:rgba(247,243,236,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 6rem;
+  display:flex;align-items:center;gap:0;
+  overflow-x:auto;scrollbar-width:none;
+  box-shadow:var(--sh-sm);
+}
+.filter-bar::-webkit-scrollbar{display:none}
+.filter-btn{
+  flex-shrink:0;
+  font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--muted);padding:1.1rem 1.6rem;
+  border:none;background:transparent;
+  border-bottom:2px solid transparent;
+  transition:all .3s var(--ease);
+  cursor:none;white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;
+}
+.filter-btn:hover{color:var(--muted-hi)}
+.filter-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.filter-count{
+  display:inline-block;font-size:.5rem;
+  background:var(--accent-dim);border:1px solid var(--border-hi);
+  color:var(--accent);padding:.1rem .4rem;margin-left:.5rem;
+  vertical-align:middle;
+}
+
+/* ── MAIN LAYOUT ── */
+.blog-layout{
+  display:grid;grid-template-columns:1fr 330px;
+  gap:4rem;padding:5rem 6rem;align-items:start;
+}
+
+/* ── FEATURED POST ── */
+.featured{
+  border:1px solid var(--border);overflow:hidden;
+  position:relative;margin-bottom:3rem;
+  cursor:pointer;transition:border-color .4s var(--ease),box-shadow .4s;
+  background:var(--glass);backdrop-filter:blur(8px);
+  box-shadow:var(--sh-sm);
+  -webkit-tap-highlight-color:transparent;
+}
+.featured:hover{border-color:var(--border-hi);box-shadow:var(--sh-md)}
+.feat-img{height:420px;overflow:hidden;position:relative}
+.feat-img img{
+  width:100%;height:100%;object-fit:cover;
+  filter:brightness(.80) saturate(.65);
+  transition:transform .8s var(--ease-out),filter .6s;
+}
+.featured:hover .feat-img img{transform:scale(1.04);filter:brightness(.72) saturate(.55)}
+.feat-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(247,243,236,.96) 0%,rgba(247,243,236,.15) 55%,transparent 100%);
+}
+.feat-badge{
+  position:absolute;top:1.5rem;left:1.5rem;z-index:2;
+  font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;
+  color:#fff;background:var(--accent);padding:.3rem .9rem;
+  box-shadow:0 2px 10px rgba(184,146,42,.3);
+}
+.feat-body{padding:2.2rem 2.5rem}
+.feat-cat{
+  font-size:.55rem;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--accent);display:flex;align-items:center;gap:.5rem;margin-bottom:.8rem;
+}
+.feat-cat::before{content:'';display:inline-block;width:1.5rem;height:1px;background:var(--accent)}
+.feat-title{
+  font-family:var(--fd);font-size:clamp(1.6rem,3vw,2.8rem);
+  font-weight:300;line-height:1.05;color:var(--white);
+  margin-bottom:.9rem;transition:color .3s;
+}
+.featured:hover .feat-title{color:var(--accent)}
+.feat-excerpt{font-size:.82rem;color:var(--muted-hi);line-height:1.8;max-width:60ch;margin-bottom:1.5rem}
+.feat-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:1.2rem;border-top:1px solid var(--border);
+  flex-wrap:wrap;gap:.8rem;
+}
+.feat-author{display:flex;align-items:center;gap:.75rem}
+.author-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(184,146,42,.12);border:1px solid var(--border-hi);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;color:var(--accent);font-weight:500;
+}
+.author-name{font-size:.72rem;color:var(--white)}
+.author-role{font-size:.58rem;color:var(--muted);letter-spacing:.05em}
+.feat-readtime{
+  font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;gap:.5rem;
+}
+.feat-readtime i{color:var(--accent);font-size:.6rem}
+.feat-link{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);border:1px solid var(--border-hi);
+  padding:.55rem 1.2rem;transition:all .4s var(--ease);
+  background:rgba(184,146,42,.05);
+  -webkit-tap-highlight-color:transparent;
+}
+.feat-link:hover,.feat-link:active{background:var(--accent-dim)}
+.feat-link i{transition:transform .3s}
+.feat-link:hover i{transform:translateX(3px)}
+
+/* ── GRID POSTS ── */
+.posts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.5rem}
+.post-card{
+  border:1px solid var(--border);overflow:hidden;
+  cursor:pointer;transition:border-color .4s var(--ease),background .4s,box-shadow .4s;
+  position:relative;background:var(--glass);
+  box-shadow:var(--sh-sm);
+  -webkit-tap-highlight-color:transparent;
+}
+.post-card:hover,.post-card:active{border-color:var(--border-hi);background:rgba(255,255,255,.85);box-shadow:var(--sh-md)}
+.post-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right,transparent,var(--accent),transparent);
+  opacity:0;transform:scaleX(0);transition:opacity .4s,transform .5s var(--ease);
+}
+.post-card:hover::before{opacity:1;transform:scaleX(1)}
+.post-img{height:175px;overflow:hidden}
+.post-img img{
+  width:100%;height:100%;object-fit:cover;
+  filter:brightness(.82) saturate(.65);
+  transition:transform .7s var(--ease-out),filter .5s;
+}
+.post-card:hover .post-img img{transform:scale(1.05);filter:brightness(.72) saturate(.55)}
+.post-body{padding:1.4rem}
+.post-cat{font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.post-title{
+  font-family:var(--fd);font-size:1.2rem;font-weight:300;
+  line-height:1.15;color:var(--white);margin-bottom:.5rem;transition:color .3s;
+}
+.post-card:hover .post-title{color:var(--accent)}
+.post-excerpt{font-size:.72rem;color:var(--muted-hi);line-height:1.65;margin-bottom:1rem}
+.post-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:.85rem;border-top:1px solid var(--border);
+}
+.post-date{font-size:.55rem;letter-spacing:.15em;color:var(--muted)}
+.post-read{font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:.4rem}
+.post-read i{font-size:.55rem;transition:transform .3s}
+.post-card:hover .post-read i{transform:translateX(3px)}
+
+/* ── LIST POSTS ── */
+.post-list{
+  display:flex;flex-direction:column;gap:0;
+  border:1px solid var(--border);
+  background:var(--glass);backdrop-filter:blur(8px);
+  box-shadow:var(--sh-sm);
+}
+.post-row{
+  display:grid;grid-template-columns:115px 1fr;gap:0;
+  border-bottom:1px solid var(--border);overflow:hidden;
+  cursor:pointer;transition:background .3s;
+  -webkit-tap-highlight-color:transparent;
+}
+.post-row:last-child{border-bottom:none}
+.post-row:hover,.post-row:active{background:rgba(255,255,255,.7)}
+.post-row-img{height:88px;overflow:hidden}
+.post-row-img img{
+  width:100%;height:100%;object-fit:cover;
+  filter:brightness(.82) saturate(.6);
+  transition:transform .6s var(--ease-out),filter .4s;
+}
+.post-row:hover .post-row-img img{transform:scale(1.08);filter:brightness(.72)}
+.post-row-body{padding:.9rem 1.1rem;display:flex;flex-direction:column;justify-content:space-between}
+.post-row-cat{font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent)}
+.post-row-title{
+  font-family:var(--fd);font-size:1rem;font-weight:300;
+  color:var(--white);line-height:1.2;transition:color .3s;
+}
+.post-row:hover .post-row-title,.post-row:active .post-row-title{color:var(--accent)}
+.post-row-date{font-size:.52rem;letter-spacing:.1em;color:var(--muted)}
+
+/* ── LOAD MORE ── */
+.load-more{display:flex;align-items:center;justify-content:center;padding:2.5rem 0}
+.load-btn{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--muted-hi);border:1px solid var(--border);
+  padding:.85rem 2rem;background:var(--glass);
+  transition:all .4s var(--ease);
+  -webkit-tap-highlight-color:transparent;
+  box-shadow:var(--sh-sm);
+}
+.load-btn:hover,.load-btn:active{border-color:var(--border-hi);color:var(--accent);background:rgba(255,255,255,.8)}
+.load-btn i{transition:transform .4s}
+.load-btn:hover i{transform:rotate(180deg)}
+
+/* ── SIDEBAR ── */
+.sidebar{display:flex;flex-direction:column;gap:1.8rem;position:sticky;top:118px}
+
+.sb-search{position:relative}
+.sb-search input{
+  width:100%;
+  background:rgba(255,255,255,.75);
+  border:1px solid var(--border);
+  color:var(--white);
+  padding:.85rem 3rem .85rem 1.1rem;
+  font-size:.8rem;font-family:var(--fb);outline:none;
+  transition:border-color .3s,background .3s;
+  caret-color:var(--accent);
+  box-shadow:var(--sh-sm);
+}
+.sb-search input::placeholder{color:var(--muted);font-size:.78rem}
+.sb-search input:focus{border-color:var(--border-hi);background:rgba(255,255,255,.95)}
+.sb-search button{
+  position:absolute;right:.8rem;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--muted-hi);font-size:.8rem;transition:color .3s;
+}
+.sb-search button:hover{color:var(--accent)}
+
+.sb-widget{
+  border:1px solid var(--border);overflow:hidden;
+  background:var(--glass);backdrop-filter:blur(8px);
+  box-shadow:var(--sh-sm);
+}
+.sb-widget-head{
+  padding:1rem 1.3rem;border-bottom:1px solid var(--border);
+  background:rgba(237,232,223,.6);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sb-widget-title{font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;color:var(--accent)}
+.sb-widget-body{padding:1.3rem}
+
+.cat-list{display:flex;flex-direction:column;gap:.3rem}
+.cat-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.65rem .8rem;border:1px solid transparent;
+  transition:all .3s;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.cat-item:hover,.cat-item:active{border-color:var(--border);background:rgba(255,255,255,.6)}
+.cat-name{font-size:.75rem;color:var(--muted-hi);display:flex;align-items:center;gap:.6rem;transition:color .3s}
+.cat-item:hover .cat-name,.cat-item:active .cat-name{color:var(--accent)}
+.cat-name i{font-size:.7rem;color:var(--accent)}
+.cat-num{
+  font-size:.58rem;background:var(--accent-dim);
+  border:1px solid var(--border-hi);color:var(--accent);
+  padding:.1rem .5rem;letter-spacing:.1em;
+}
+
+.recent-list{display:flex;flex-direction:column;gap:0}
+.recent-item{
+  display:grid;grid-template-columns:56px 1fr;gap:.8rem;
+  padding:.85rem 0;border-bottom:1px solid var(--border);
+  cursor:pointer;transition:background .3s;
+  -webkit-tap-highlight-color:transparent;
+}
+.recent-item:last-child{border-bottom:none;padding-bottom:0}
+.recent-item:hover .recent-title,.recent-item:active .recent-title{color:var(--accent)}
+.recent-thumb{width:56px;height:46px;overflow:hidden}
+.recent-thumb img{
+  width:100%;height:100%;object-fit:cover;
+  filter:brightness(.82) saturate(.55);transition:filter .4s;
+}
+.recent-item:hover .recent-thumb img{filter:brightness(.72)}
+.recent-title{
+  font-family:var(--fd);font-size:.9rem;font-weight:300;
+  color:var(--white);line-height:1.2;transition:color .3s;
+}
+.recent-date{font-size:.52rem;letter-spacing:.1em;color:var(--muted);margin-top:.3rem}
+
+.tags-cloud{display:flex;flex-wrap:wrap;gap:.5rem}
+.tag{
+  font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted-hi);border:1px solid var(--border);
+  padding:.3rem .8rem;cursor:pointer;
+  transition:all .3s;background:rgba(255,255,255,.4);
+  -webkit-tap-highlight-color:transparent;
+}
+.tag:hover,.tag:active{border-color:var(--border-hi);color:var(--accent);background:var(--accent-dim)}
+
+.newsletter{
+  background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+  border:1px solid var(--border);
+  padding:1.8rem;position:relative;overflow:hidden;
+  box-shadow:var(--sh-sm);
+}
+.newsletter::before{
+  content:'';position:absolute;top:0;left:1rem;right:1rem;height:1px;
+  background:linear-gradient(to right,transparent,var(--border-hi),transparent);
+}
+.nl-icon{font-size:1.6rem;color:var(--accent);margin-bottom:.8rem}
+.nl-title{font-family:var(--fd);font-size:1.3rem;font-weight:300;color:var(--white);margin-bottom:.4rem}
+.nl-sub{font-size:.72rem;color:var(--muted-hi);line-height:1.6;margin-bottom:1.2rem}
+.nl-input{
+  width:100%;background:rgba(247,243,236,.8);
+  border:1px solid var(--border);color:var(--white);
+  padding:.75rem 1rem;font-size:.78rem;font-family:var(--fb);
+  outline:none;margin-bottom:.6rem;
+  transition:border-color .3s;caret-color:var(--accent);
+}
+.nl-input::placeholder{color:var(--muted)}
+.nl-input:focus{border-color:var(--border-hi);background:rgba(255,255,255,.95)}
+.nl-btn{
+  width:100%;background:var(--accent);color:#fff;
+  border:none;padding:.8rem;
+  font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;
+  font-family:var(--fb);position:relative;overflow:hidden;
+  transition:all .4s var(--ease);
+  box-shadow:0 4px 16px rgba(184,146,42,.22);
+  -webkit-tap-highlight-color:transparent;
+}
+.nl-btn::before{content:'';position:absolute;inset:0;background:var(--accent-2);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.nl-btn:hover::before{transform:scaleX(1)}
+.nl-btn span{position:relative;z-index:1}
+.nl-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(184,146,42,.28)}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease-out),transform .8s var(--ease-out)}
+.rv.on{opacity:1;transform:none}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}
+.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}.rv.d5{transition-delay:.40s}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  padding:2rem 6rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.ft-logo{font-family:var(--fd);font-size:1.2rem;font-weight:300;letter-spacing:.12em;color:var(--muted-hi)}
+.ft-logo em{font-style:italic;color:var(--accent)}
+.ft-copy{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.ft-back{
+  display:flex;align-items:center;gap:.5rem;
+  font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted-hi);border:1px solid var(--border);
+  padding:.45rem 1rem;transition:all .3s;
+  background:var(--glass);
+  -webkit-tap-highlight-color:transparent;
+}
+.ft-back:hover,.ft-back:active{border-color:var(--border-hi);color:var(--accent)}
+.ft-back i{font-size:.6rem}
+
+/* ── WA FAB ── */
+.wa{
+  position:fixed;bottom:2rem;right:2rem;
+  width:52px;height:52px;border-radius:50%;
+  background:#25d366;display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;color:#fff;z-index:600;
+  box-shadow:0 4px 20px rgba(37,211,102,.38);
+  transition:all .3s var(--ease-spring);
+  -webkit-tap-highlight-color:transparent;
+}
+.wa:hover,.wa:active{transform:scale(1.15) translateY(-3px)}
+.wa::before{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  border:1px solid rgba(37,211,102,.3);
+  animation:waPulse 2.5s ease-in-out infinite;
+}
+@keyframes waPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.2);opacity:0}}
+
+/* ════════════════════════════════════════════
+   RESPONSIVE — Mobile First
+════════════════════════════════════════════ */
+
+/* Tablet 1100px */
+@media(max-width:1100px){
+  .blog-layout{grid-template-columns:1fr;gap:3rem}
+  .sidebar{position:static;top:auto}
+  .hero{padding:9rem 3.5rem 4rem}
+  .hero-inner{grid-template-columns:1fr;gap:2rem}
+  .filter-bar,.topic-banner,footer{padding-left:3.5rem;padding-right:3.5rem}
+  .blog-layout{padding:4rem 3.5rem}
+}
+
+/* Large phone 860px */
+@media(max-width:860px){
+  body{cursor:auto}
+  #cur,#cur-r{display:none}
+  button{cursor:pointer}
+
+  nav{padding:0 1.2rem;height:56px}
+  .nav-links,.nav-center{display:none}
+  .filter-bar{top:56px}
+
+  .hero{padding:7.5rem 1.6rem 3rem}
+  .hero-inner{grid-template-columns:1fr;gap:2rem}
+  .filter-bar{padding-left:1rem;padding-right:1rem}
+  .blog-layout{padding:3rem 1.6rem;gap:2.5rem}
+  footer{padding:2rem 1.6rem}
+
+  .topic-banner{
+    grid-template-columns:1fr 1fr;
+    padding:0 1.6rem;
+  }
+  .topic-card{border-bottom:1px solid var(--border);padding:1.5rem 1.2rem}
+
+  .feat-img{height:280px}
+  .feat-body{padding:1.4rem 1.6rem}
+
+  .posts-grid{grid-template-columns:1fr 1fr;gap:.8rem}
+
+  footer{gap:1rem}
+  .wa{bottom:1.2rem;right:1.2rem;width:46px;height:46px;font-size:1.2rem}
+}
+
+/* Portrait phone 640px */
+@media(max-width:640px){
+  nav{height:52px;padding:0 1rem}
+  .filter-bar{top:52px;padding:0 .5rem}
+  .filter-btn{padding:.9rem 1rem;font-size:.54rem;letter-spacing:.18em}
+
+  .hero{padding:7rem 1.2rem 2.5rem}
+  .hero-left h1{font-size:clamp(2.2rem,9vw,3.2rem)}
+  .hero-right p{font-size:.82rem}
+  .hero-meta{gap:1.2rem}
+  .hero-meta-num{font-size:1.8rem}
+
+  .topic-banner{grid-template-columns:1fr;padding:0 1.2rem}
+  .topic-card{border-right:none;border-bottom:1px solid var(--border)}
+
+  .blog-layout{padding:2.5rem 1.2rem}
+
+  .feat-img{height:220px}
+  .feat-body{padding:1.2rem}
+  .feat-footer{flex-direction:column;align-items:flex-start;gap:.8rem}
+  .feat-title{font-size:1.5rem}
+
+  .posts-grid{grid-template-columns:1fr;gap:.8rem}
+
+  .post-row{grid-template-columns:90px 1fr}
+  .post-row-img{height:80px}
+
+  footer{flex-direction:column;gap:.8rem;text-align:center;padding:1.8rem 1.2rem}
+  .ft-copy{order:3}
+
+  .wa{bottom:calc(1.2rem + env(safe-area-inset-bottom,0px))}
+}
+
+/* Tiny 400px */
+@media(max-width:400px){
+  .hero-left h1{font-size:2rem}
+  .feat-img{height:185px}
+  .feat-body{padding:1rem}
+  .feat-excerpt{font-size:.78rem}
+  .filter-btn{padding:.85rem .75rem;font-size:.52rem}
+  .filter-count{display:none}
+  .blog-layout{padding:2rem 1rem}
+}
+
+/* Touch-specific improvements */
+@media(hover:none){
+  /* Project tags always visible on touch */
+  .post-read i{transform:translateX(2px)}
+  /* Generous tap targets on filter pills */
+  .filter-btn{padding:1rem 1.2rem}
+  /* Remove tilt on touch — it's disorienting */
+  .post-card,.featured{
+    transition:border-color .3s,background .3s,box-shadow .3s !important;
+    transform:none !important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="images/DDES Digital LOG.png" alt="" onerror="this.style.display='none'">
+    <span class="nav-logo-text">Dev <em>Designs</em></span>
+  </div>
+  <div class="nav-center">Engineering Services · Bhopal</div>
+  <a href="index.html" class="nav-back"><i class="fas fa-arrow-left"></i> Main Site</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner rv">
+    <div class="hero-left">
+      <div class="eyebrow"><i class="fas fa-pen-nib"></i> Dev Designs Journal</div>
+      <h1>Insights &<br><em>Ideas</em><br>in Built Space.</h1>
+    </div>
+    <div class="hero-right">
+      <p>Expert perspectives on construction, real estate, interior design and the art of building better spaces — straight from our team on the ground in Bhopal.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="hero-meta-num">18<sup>+</sup></div>
+          <div class="hero-meta-lbl">Articles</div>
+        </div>
+        <div class="hero-meta-sep"></div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-num">4</div>
+          <div class="hero-meta-lbl">Categories</div>
+        </div>
+        <div class="hero-meta-sep"></div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-num">2<sup>k+</sup></div>
+          <div class="hero-meta-lbl">Readers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOPICS -->
+<div class="topic-banner">
+  <div class="topic-card rv" data-cat="construction">
+    <div class="topic-icon"><i class="fas fa-hard-hat"></i></div>
+    <div class="topic-name">Construction</div>
+    <div class="topic-count">6 Articles</div>
+  </div>
+  <div class="topic-card rv d1" data-cat="realestate">
+    <div class="topic-icon"><i class="fas fa-building"></i></div>
+    <div class="topic-name">Real Estate</div>
+    <div class="topic-count">5 Articles</div>
+  </div>
+  <div class="topic-card rv d2" data-cat="design">
+    <div class="topic-icon"><i class="fas fa-ruler-combined"></i></div>
+    <div class="topic-name">Interior Design</div>
+    <div class="topic-count">4 Articles</div>
+  </div>
+  <div class="topic-card rv d3" data-cat="wallart">
+    <div class="topic-icon"><i class="fas fa-paintbrush"></i></div>
+    <div class="topic-name">Wall Art &amp; Landscape</div>
+    <div class="topic-count">3 Articles</div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar" id="filterBar">
+  <button class="filter-btn active" data-filter="all">All Posts <span class="filter-count">18</span></button>
+  <button class="filter-btn" data-filter="construction">Construction <span class="filter-count">6</span></button>
+  <button class="filter-btn" data-filter="realestate">Real Estate <span class="filter-count">5</span></button>
+  <button class="filter-btn" data-filter="design">Interior Design <span class="filter-count">4</span></button>
+  <button class="filter-btn" data-filter="wallart">Wall Art <span class="filter-count">3</span></button>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="blog-layout">
+
+  <!-- POSTS COLUMN -->
+  <div class="posts-col">
+
+    <!-- FEATURED -->
+    <div class="featured rv" data-cat="construction">
+      <div class="feat-img">
+        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=75" alt="Construction" loading="lazy">
+        <div class="feat-badge">Featured</div>
+      </div>
+      <div class="feat-body">
+        <div class="feat-cat">Construction</div>
+        <div class="feat-title">5 Things Every Homeowner Must Know Before Starting Construction in Bhopal</div>
+        <p class="feat-excerpt">Building your dream home? The permitting landscape in Bhopal's expanding zones has changed significantly in 2024. From RERA compliance to soil testing requirements in Kolar Road and Hoshangabad Road corridors — here's what you need to know before breaking ground.</p>
+        <div class="feat-footer">
+          <div class="feat-author">
+            <div class="author-avatar">DD</div>
+            <div>
+              <div class="author-name">Dev Designs Team</div>
+              <div class="author-role">Construction & Engineering</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap">
+            <div class="feat-readtime"><i class="fas fa-clock"></i> 6 min read · 14 Jan 2025</div>
+            <a href="#" class="feat-link">Read Article <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRID POSTS -->
+    <div class="posts-grid">
+      <div class="post-card rv" data-cat="realestate">
+        <div class="post-img"><img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=70" alt="Real Estate" loading="lazy"></div>
+        <div class="post-body">
+          <div class="post-cat">Real Estate</div>
+          <div class="post-title">Bhopal's Top 5 Neighbourhoods for Investment in 2025</div>
+          <p class="post-excerpt">From Arera Colony to the emerging BHEL sector — where smart money is going this year.</p>
+          <div class="post-footer">
+            <div class="post-date">10 Jan 2025</div>
+            <div class="post-read">Read More <i class="fas fa-arrow-right"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="post-card rv d1" data-cat="design">
+        <div class="post-img"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=70" alt="Interior" loading="lazy"></div>
+        <div class="post-body">
+          <div class="post-cat">Interior Design</div>
+          <div class="post-title">Open Plan vs Defined Rooms: What Works for Indian Homes</div>
+          <p class="post-excerpt">A practical guide to choosing the layout that suits your family's lifestyle and your city's climate.</p>
+          <div class="post-footer">
+            <div class="post-date">5 Jan 2025</div>
+            <div class="post-read">Read More <i class="fas fa-arrow-right"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="post-card rv d2" data-cat="wallart">
+        <div class="post-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=70" alt="Wall Art" loading="lazy"></div>
+        <div class="post-body">
+          <div class="post-cat">Wall Art</div>
+          <div class="post-title">How a Single Feature Wall Can Transform a ₹50L Flat</div>
+          <p class="post-excerpt">The ROI of bespoke wall art is higher than most people realise. We break down the numbers.</p>
+          <div class="post-footer">
+            <div class="post-date">28 Dec 2024</div>
+            <div class="post-read">Read More <i class="fas fa-arrow-right"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="post-card rv d3" data-cat="construction">
+        <div class="post-img"><img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=70" alt="Project Management" loading="lazy"></div>
+        <div class="post-body">
+          <div class="post-cat">Construction</div>
+          <div class="post-title">Why 68% of Construction Projects in India Run Over Budget</div>
+          <p class="post-excerpt">Common planning errors and how a dedicated project manager prevents cost overruns from day one.</p>
+          <div class="post-footer">
+            <div class="post-date">20 Dec 2024</div>
+            <div class="post-read">Read More <i class="fas fa-arrow-right"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIST POSTS -->
+    <div class="post-list rv">
+      <div class="post-row" data-cat="realestate">
+        <div class="post-row-img"><img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=300&q=60" alt="" loading="lazy"></div>
+        <div class="post-row-body">
+          <div class="post-row-cat">Real Estate</div>
+          <div class="post-row-title">RERA 2024 Updates: What Buyers in MP Must Know</div>
+          <div class="post-row-date">15 Dec 2024 · 4 min read</div>
+        </div>
+      </div>
+      <div class="post-row" data-cat="design">
+        <div class="post-row-img"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=300&q=60" alt="" loading="lazy"></div>
+        <div class="post-row-body">
+          <div class="post-row-cat">Interior Design</div>
+          <div class="post-row-title">Vastu + Modern Design: Finding the Balance</div>
+          <div class="post-row-date">8 Dec 2024 · 5 min read</div>
+        </div>
+      </div>
+      <div class="post-row" data-cat="construction">
+        <div class="post-row-img"><img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=300&q=60" alt="" loading="lazy"></div>
+        <div class="post-row-body">
+          <div class="post-row-cat">Construction</div>
+          <div class="post-row-title">AAC Blocks vs Red Bricks: The 2025 Cost Comparison</div>
+          <div class="post-row-date">2 Dec 2024 · 7 min read</div>
+        </div>
+      </div>
+      <div class="post-row" data-cat="wallart">
+        <div class="post-row-img"><img src="https://images.unsplash.com/photo-1615971677499-5467cbab01b0?w=300&q=60" alt="" loading="lazy"></div>
+        <div class="post-row-body">
+          <div class="post-row-cat">Wall Art</div>
+          <div class="post-row-title">Textured Walls in 2025: Which Finish to Choose?</div>
+          <div class="post-row-date">25 Nov 2024 · 3 min read</div>
+        </div>
+      </div>
+      <div class="post-row" data-cat="realestate">
+        <div class="post-row-img"><img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=300&q=60" alt="" loading="lazy"></div>
+        <div class="post-row-body">
+          <div class="post-row-cat">Real Estate</div>
+          <div class="post-row-title">Is Kolar Road Bhopal's Next Big Property Corridor?</div>
+          <div class="post-row-date">18 Nov 2024 · 5 min read</div>
+        </div>
+      </div>
+      <div class="post-row" data-cat="design">
+        <div class="post-row-img"><img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=300&q=60" alt="" loading="lazy"></div>
+        <div class="post-row-body">
+          <div class="post-row-cat">Interior Design</div>
+          <div class="post-row-title">Modular Kitchens Under ₹3 Lakh: What's Possible?</div>
+          <div class="post-row-date">10 Nov 2024 · 4 min read</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOAD MORE -->
+    <div class="load-more">
+      <button class="load-btn"><i class="fas fa-sync-alt"></i> Load More Articles</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- Search -->
+    <div class="sb-search rv">
+      <input type="text" placeholder="Search articles…" id="searchInput">
+      <button><i class="fas fa-search"></i></button>
+    </div>
+
+    <!-- Categories -->
+    <div class="sb-widget rv d1">
+      <div class="sb-widget-head"><div class="sb-widget-title">Categories</div></div>
+      <div class="sb-widget-body">
+        <div class="cat-list">
+          <div class="cat-item" data-filter="all"><span class="cat-name"><i class="fas fa-th"></i> All Posts</span><span class="cat-num">18</span></div>
+          <div class="cat-item" data-filter="construction"><span class="cat-name"><i class="fas fa-hard-hat"></i> Construction</span><span class="cat-num">6</span></div>
+          <div class="cat-item" data-filter="realestate"><span class="cat-name"><i class="fas fa-building"></i> Real Estate</span><span class="cat-num">5</span></div>
+          <div class="cat-item" data-filter="design"><span class="cat-name"><i class="fas fa-ruler-combined"></i> Interior Design</span><span class="cat-num">4</span></div>
+          <div class="cat-item" data-filter="wallart"><span class="cat-name"><i class="fas fa-paintbrush"></i> Wall Art</span><span class="cat-num">3</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Posts -->
+    <div class="sb-widget rv d2">
+      <div class="sb-widget-head"><div class="sb-widget-title">Recent Posts</div></div>
+      <div class="sb-widget-body">
+        <div class="recent-list">
+          <div class="recent-item">
+            <div class="recent-thumb"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=150&q=60" alt="" loading="lazy"></div>
+            <div><div class="recent-title">5 Things Every Homeowner Must Know Before Construction</div><div class="recent-date">14 Jan 2025</div></div>
+          </div>
+          <div class="recent-item">
+            <div class="recent-thumb"><img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=150&q=60" alt="" loading="lazy"></div>
+            <div><div class="recent-title">Bhopal's Top 5 Neighbourhoods for Investment 2025</div><div class="recent-date">10 Jan 2025</div></div>
+          </div>
+          <div class="recent-item">
+            <div class="recent-thumb"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=150&q=60" alt="" loading="lazy"></div>
+            <div><div class="recent-title">Open Plan vs Defined Rooms: What Works for Indian Homes</div><div class="recent-date">5 Jan 2025</div></div>
+          </div>
+          <div class="recent-item">
+            <div class="recent-thumb"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=150&q=60" alt="" loading="lazy"></div>
+            <div><div class="recent-title">How a Feature Wall Can Transform a ₹50L Flat</div><div class="recent-date">28 Dec 2024</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="sb-widget rv d3">
+      <div class="sb-widget-head"><div class="sb-widget-title">Tags</div></div>
+      <div class="sb-widget-body">
+        <div class="tags-cloud">
+          <span class="tag">Bhopal</span><span class="tag">Construction</span><span class="tag">RERA</span>
+          <span class="tag">Interior</span><span class="tag">Mural</span><span class="tag">Renovation</span>
+          <span class="tag">Real Estate</span><span class="tag">Budget Tips</span><span class="tag">Vastu</span>
+          <span class="tag">2025</span><span class="tag">MP Nagar</span><span class="tag">Kolar Road</span>
+          <span class="tag">Wall Art</span><span class="tag">Project Mgmt</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="newsletter rv d4">
+      <div class="nl-icon"><i class="fas fa-envelope-open-text"></i></div>
+      <div class="nl-title">Stay Updated</div>
+      <p class="nl-sub">Get our latest articles on construction, real estate & design delivered to your inbox.</p>
+      <input class="nl-input" type="email" placeholder="your@email.com">
+      <button class="nl-btn"><span>Subscribe Free</span></button>
+    </div>
+
+  </aside>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-logo">Dev <em>Designs</em></div>
+  <div class="ft-copy">© 2025 Dev Designs & Engineering Services · Bhopal, MP</div>
+  <a href="index.html" class="ft-back"><i class="fas fa-arrow-left"></i> Main Site</a>
+</footer>
+
+<a href="https://wa.me/919669448284" class="wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+<script>
+/* ── CUSTOM CURSOR (desktop only) ── */
+const cur=document.getElementById('cur'),curR=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+if(window.matchMedia('(pointer:fine)').matches){
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX;my=e.clientY;
+    cur.style.left=mx+'px';cur.style.top=my+'px';
+  });
+  (function loop(){
+    rx+=(mx-rx)*.1;ry+=(my-ry)*.1;
+    curR.style.left=rx+'px';curR.style.top=ry+'px';
+    requestAnimationFrame(loop);
+  })();
+}
+
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(entries=>entries.forEach(x=>{
+  if(x.isIntersecting) x.target.classList.add('on');
+}),{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+/* ── FILTER ── */
+function setFilter(cat){
+  document.querySelectorAll('.filter-btn').forEach(b=>
+    b.classList.toggle('active',b.dataset.filter===cat));
+  document.querySelectorAll('[data-cat]').forEach(el=>{
+    const show = cat==='all' || el.dataset.cat===cat;
+    el.style.transition='opacity .4s, transform .4s';
+    el.style.opacity = show ? '1' : '0.15';
+    el.style.pointerEvents = show ? 'auto' : 'none';
+    el.style.transform = show ? 'scale(1)' : 'scale(0.97)';
+  });
+}
+document.querySelectorAll('.filter-btn').forEach(b=>
+  b.addEventListener('click',()=>setFilter(b.dataset.filter)));
+document.querySelectorAll('.cat-item').forEach(c=>
+  c.addEventListener('click',()=>setFilter(c.dataset.filter)));
+document.querySelectorAll('.topic-card').forEach(t=>
+  t.addEventListener('click',()=>setFilter(t.dataset.cat)));
+
+/* ── SEARCH ── */
+document.getElementById('searchInput').addEventListener('input',function(){
+  const q=this.value.toLowerCase();
+  document.querySelectorAll('[data-cat]').forEach(el=>{
+    const show=!q||el.textContent.toLowerCase().includes(q);
+    el.style.opacity=show?'1':'0.1';
+    el.style.pointerEvents=show?'auto':'none';
+  });
+});
+
+/* ── TILT — desktop only ── */
+if(window.matchMedia('(hover:hover)').matches){
+  document.querySelectorAll('.post-card,.featured').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform=`perspective(900px) rotateX(${-y*3}deg) rotateY(${x*3}deg)`;
+      card.style.transition='transform .08s linear';
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform='';
+      card.style.transition='transform .6s var(--ease-out)';
+    });
+  });
+
+  /* Magnetic buttons */
+  document.querySelectorAll('.load-btn,.nl-btn,.feat-link,.nav-back,.ft-back').forEach(btn=>{
+    btn.addEventListener('mousemove',e=>{
+      const r=btn.getBoundingClientRect();
+      const dx=(e.clientX-r.left-r.width/2)*.2;
+      const dy=(e.clientY-r.top-r.height/2)*.2;
+      btn.style.transform=`translate(${dx}px,${dy}px)`;
+      btn.style.transition='transform .08s linear';
+    });
+    btn.addEventListener('mouseleave',()=>{
+      btn.style.transform='';
+      btn.style.transition='transform .5s var(--ease-spring)';
+    });
+  });
+}
+
+/* ── NEWSLETTER ── */
+document.querySelector('.nl-btn').addEventListener('click',function(){
+  const inp=document.querySelector('.nl-input');
+  if(!inp.value||!inp.value.includes('@')){
+    inp.style.borderColor='rgba(180,60,60,.5)';
+    setTimeout(()=>inp.style.borderColor='',2000);
+    return;
+  }
+  this.innerHTML='<span>✓ Subscribed!</span>';
+  this.style.background='#1d9e75';
+  inp.value='';
+  setTimeout(()=>{
+    this.innerHTML='<span>Subscribe Free</span>';
+    this.style.background='';
+  },3000);
+});
+</script>
+</body>
+</html>
